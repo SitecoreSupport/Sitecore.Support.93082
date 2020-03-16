@@ -39,7 +39,14 @@
             else
             {
                 Assert.IsNotNull(Context.Site, "site");
-                itemNotFoundUrl = (Context.Site.LoginPage != string.Empty) ? Context.Site.LoginPage : Settings.NoAccessUrl;
+                if (!Context.User.IsAuthenticated && !string.IsNullOrEmpty(Context.Site.LoginPage))
+                {
+                    itemNotFoundUrl = Context.Site.LoginPage;
+                }
+                else
+                {
+                    itemNotFoundUrl = Settings.NoAccessUrl;
+                }
                 isRedirectToLoginPage = itemNotFoundUrl == Context.Site.LoginPage ? true : false;
             }
             string siteName = (Context.Site != null) ? Context.Site.Name : string.Empty;
